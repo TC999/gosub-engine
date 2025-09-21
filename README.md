@@ -106,6 +106,30 @@ ls target/criterion/report
 index.html
 ```
 
+## Windows Builds
+
+The project supports cross-compilation to Windows executables. To build Windows `.exe` files:
+
+```bash
+# Install dependencies (Linux/Ubuntu)
+sudo apt install -y mingw-w64 gcc-mingw-w64-x86-64
+rustup target add x86_64-pc-windows-gnu
+
+# Build Windows executables
+make build-windows
+# or
+./build-windows.sh
+```
+
+**Available Windows executables:**
+- `css3-parser-minimal.exe` - Standalone CSS3 parser and tokenizer (2.6MB)
+
+The Windows executables are built without GUI dependencies and can run on any Windows 10+ system. 
+
+📁 **Output location:** `target/x86_64-pc-windows-gnu/release/`
+
+For detailed information, see [docs/windows-builds.md](docs/windows-builds.md).
+
 ## Wasm
 
 Our engine can also be compiled to WebAssembly. You need to use WasmPack for this. To build the Wasm version, run:

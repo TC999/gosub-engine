@@ -6,10 +6,14 @@ authors = ["Gosub Community <info@gosub.io>"]
 license = "MIT"
 description = "Taffy layouter for Gosub"
 
+[features]
+default = ["fontmanager"]
+fontmanager = ["dep:gosub_fontmanager"]
+
 [dependencies]
 gosub_shared = { version = "0.1.1", registry = "gosub", path = "../gosub_shared" }
 gosub_interface = { version = "0.1.1", registry = "gosub", path = "../gosub_interface" }
-gosub_fontmanager = { version = "0.1.0", path = "../gosub_fontmanager", registry = "gosub" }
+gosub_fontmanager = { version = "0.1.0", path = "../gosub_fontmanager", registry = "gosub", optional = true, default-features = false }
 taffy = "0.7.7"
 anyhow = "1.0.98"
 regex = "1.11.1"

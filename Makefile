@@ -14,6 +14,11 @@ build: ## Build the project
 	section "Cargo build" ;\
 	cargo build --all
 
+build-windows: ## Build Windows executables using cross-compilation
+	@echo "🏗️  Building Windows executables..."
+	@chmod +x build-windows.sh
+	@./build-windows.sh
+
 fix-format:  ## Fix formatting and clippy errors
 	cargo fmt --all
 	cargo clippy --all --fix --allow-dirty --allow-staged

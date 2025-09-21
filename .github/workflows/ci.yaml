@@ -135,3 +135,41 @@ jobs:
             ${{ runner.os }}-cargo-target-${{ matrix.rust_version }}-
       - name: Run fmt
         run: cargo fmt --check --all
+
+  # Windows cross-compilation job
+  windows:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: x86_64-pc-windows-gnu
+      - name: Install dependencies
+        run: |
+          sudo apt update -y
+          sudo apt install -y mingw-w64 gcc-mingw-w64-x86-64
+      - name: Cache cargo
+        uses: actions/cache@v4
+        with:
+          path: ~/.cargo
+          key: windows-cargo-registry-${{ hashFiles('**/Cargo.lock') }}
+          restore-keys: |
+            windows-cargo-registry-
+      - name: Cache cargo build
+        uses: actions/cache@v4
+        with:
+          path: target
+          key: windows-cargo-target-${{ hashFiles('**/Cargo.lock') }}
+          restore-keys: |
+            windows-cargo-target-
+      - name: Build Windows executable
+        run: |
+          rustup target add x86_64-pc-windows-gnu
+          chmod +x build-windows.sh
+          ./build-windows.sh
+      - name: Upload Windows artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-executables
+          path: target/x86_64-pc-windows-gnu/release/*.exe
+          retention-days: 30
