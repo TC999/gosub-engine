@@ -1986,6 +1986,7 @@ name = "gosub_css3"
 version = "0.1.2"
 dependencies = [
  "anyhow",
+ "clap",
  "colors-transform",
  "cow-utils",
  "gosub_interface",
@@ -2000,6 +2001,7 @@ dependencies = [
  "serde_json",
  "simple_logger",
  "thiserror 2.0.12",
+ "ureq",
 ]
 
 [[package]]
