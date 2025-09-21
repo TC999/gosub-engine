@@ -17,14 +17,21 @@ path = "src/bin/generate-svg.rs"
 [[bin]]
 name = "gtk-test"
 path = "src/bin/gtk-test.rs"
+required-features = ["gtk"]
 
 [[bin]]
 name = "gtk2-test"
 path = "src/bin/gtk2-test.rs"
+required-features = ["gtk"]
 
 [[bin]]
 name = "vello-test"
 path = "src/bin/vello-test.rs"
+
+[features]
+default = ["gtk", "cairo"]
+gtk = ["dep:gtk4", "dep:pangocairo"]
+cairo = ["dep:cairo-rs"]
 
 [dependencies]
 gosub_interface = { version = "0.1.1", registry = "gosub", path = "../gosub_interface", features = [] }
@@ -40,11 +47,12 @@ swash = "0.2.2"
 lazy_static = "1.5.0"
 rand = "0.9.1"
 cow-utils = "0.1.3"
-
-gtk4 = { version = "0.8.0", features = ["v4_6"] }
 parley = "0.3.0"
 font-kit = { version = "0.14.2" }
 freetype-rs = "0.36.0"
+
+# Optional dependencies for Linux/Unix systems
+gtk4 = { version = "0.8.0", features = ["v4_6"], optional = true }
 # 19.4 is the latest version that works with the current version of font-kit (0.14.2)
-cairo-rs = { version = "0.19.4", features = ["use_glib", "freetype"] }
-pangocairo = "0.19.8"
+cairo-rs = { version = "0.19.4", features = ["use_glib", "freetype"], optional = true }
+pangocairo = { version = "0.19.8", optional = true }

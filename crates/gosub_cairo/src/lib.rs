@@ -1,24 +1,39 @@
+#[cfg(feature = "cairo")]
 use crate::elements::border::{GsBorder, GsBorderRadius, GsBorderSide};
+#[cfg(feature = "cairo")]
 use crate::elements::brush::GsBrush;
+#[cfg(feature = "cairo")]
 use crate::elements::color::GsColor;
+#[cfg(feature = "cairo")]
 use crate::elements::gradient::GsGradient;
+#[cfg(feature = "cairo")]
 use crate::elements::image::GsImage;
+#[cfg(feature = "cairo")]
 use crate::elements::rect::GsRect;
+#[cfg(feature = "cairo")]
 use crate::elements::text::GsText;
+#[cfg(feature = "cairo")]
 use crate::elements::transform::GsTransform;
+#[cfg(feature = "cairo")]
 use crate::render::window::{ActiveWindowData, WindowData};
 use gosub_interface::render_backend::{RenderBackend, RenderRect, RenderText, Scene as _, WindowHandle};
 use gosub_shared::geo::SizeU32;
 use gosub_shared::types::Result;
 pub use image::*;
+#[cfg(feature = "cairo")]
 use log::info;
+#[cfg(feature = "cairo")]
 pub use scene::*;
 use std::fmt::Debug;
 
+#[cfg(feature = "cairo")]
 mod debug;
+#[cfg(feature = "cairo")]
 mod elements;
+#[cfg(feature = "cairo")]
 #[allow(unused)]
 pub mod render;
+#[cfg(feature = "cairo")]
 mod scene;
 
 #[derive(Clone)]
@@ -30,6 +45,7 @@ impl Debug for CairoBackend {
     }
 }
 
+#[cfg(feature = "cairo")]
 impl RenderBackend for CairoBackend {
     type Rect = GsRect;
     type Border = GsBorder;
@@ -116,6 +132,86 @@ impl RenderBackend for CairoBackend {
         active_data: &mut Self::ActiveWindowData<'_>,
     ) -> Result<()> {
         window_data.scene.render_to_context(&active_data.cr);
+        Ok(())
+    }
+}
+
+#[cfg(not(feature = "cairo"))]
+impl RenderBackend for CairoBackend {
+    type Rect = ();
+    type Border = ();
+    type BorderSide = ();
+    type BorderRadius = ();
+    type Transform = ();
+    type Gradient = ();
+    type Color = ();
+    type Image = ();
+    type Brush = ();
+    type Scene = ();
+    type Text = ();
+    type SVGRenderer = ();
+    type FontManager = ();
+
+    type ActiveWindowData<'a> = ();
+    type WindowData<'a> = ();
+
+    fn draw_rect(&mut self, _data: &mut Self::WindowData<'_>, _rect: &RenderRect<Self>) {
+        // No-op implementation for Windows
+    }
+
+    fn draw_text(&mut self, _data: &mut Self::WindowData<'_>, _text: &RenderText<Self>) {
+        // No-op implementation for Windows
+    }
+
+    fn apply_scene(
+        &mut self,
+        _data: &mut Self::WindowData<'_>,
+        _scene: &Self::Scene,
+        _transform: Option<Self::Transform>,
+    ) {
+        // No-op implementation for Windows
+    }
+
+    fn reset(&mut self, _data: &mut Self::WindowData<'_>) {
+        // No-op implementation for Windows
+    }
+
+    fn activate_window<'a>(
+        &mut self,
+        _handle: impl WindowHandle + 'a,
+        _data: &mut Self::WindowData<'_>,
+        _size: SizeU32,
+    ) -> Result<Self::ActiveWindowData<'a>> {
+        Ok(())
+    }
+
+    fn suspend_window(
+        &mut self,
+        _handle: impl WindowHandle,
+        _data: &mut Self::ActiveWindowData<'_>,
+        _window_data: &mut Self::WindowData<'_>,
+    ) -> Result<()> {
+        Ok(())
+    }
+
+    fn create_window_data<'a>(&mut self, _handle: impl WindowHandle) -> Result<Self::WindowData<'a>> {
+        Ok(())
+    }
+
+    fn resize_window(
+        &mut self,
+        _window_data: &mut Self::WindowData<'_>,
+        _active_window_data: &mut Self::ActiveWindowData<'_>,
+        _size: SizeU32,
+    ) -> Result<()> {
+        Ok(())
+    }
+
+    fn render(
+        &mut self,
+        _window_data: &mut Self::WindowData<'_>,
+        _active_data: &mut Self::ActiveWindowData<'_>,
+    ) -> Result<()> {
         Ok(())
     }
 }
